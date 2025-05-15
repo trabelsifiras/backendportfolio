@@ -1,5 +1,6 @@
 package org.firas.portfolio.firasportfolio.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.firas.portfolio.firasportfolio.data.PcInfo;
 import org.firas.portfolio.firasportfolio.data.VisitorInfo;
 import org.firas.portfolio.firasportfolio.repository.PcInfoRepository;
@@ -64,6 +65,7 @@ public class VisitorInfoController {
                 }
             } else {
                 macAddress.append("N/A");
+                macAddress.append("N/A");
             }
             PcInfo pcInfo = PcInfo.builder().pcName(hostname).macAddress(macAddress.toString()).build();
             repository.save(pcInfo);
@@ -73,6 +75,17 @@ public class VisitorInfoController {
         } catch (Exception e) {
             info.put("error", e.getMessage());
         }
+
+        return info;
+    }
+    @GetMapping("/clientinfo")
+    public Map<String, String> getClientInfo(HttpServletRequest request) {
+        Map<String, String> info = new HashMap<>();
+        String ipAddress = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+
+        info.put("clientIp", ipAddress);
+        info.put("userAgent", userAgent);
 
         return info;
     }
